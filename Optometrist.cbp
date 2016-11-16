@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="Optometrist" />
+		<Option platforms="Unix;" />
+		<Option makefile_is_custom="1" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="all">
+				<Option output="bin/Release/ParticulateCounter" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="AnalyzerUnit.cpp" />
+		<Unit filename="AnalyzerUnit.hpp" />
+		<Unit filename="CMakeLists.txt" />
+		<Unit filename="ImageEntropyMethods/ImageEntropyMethods.cpp" />
+		<Unit filename="ImageEntropyMethods/ImageEntropyMethods.hpp" />
+		<Unit filename="LoadTemplates.cpp" />
+		<Unit filename="LoadTemplates.hpp" />
+		<Unit filename="NicerPlots.hpp" />
+		<Unit filename="P60OptometristStart.cpp" />
+		<Unit filename="PICOFormatWriter/PICOFormatWriterV2.cpp" />
+		<Unit filename="PICOFormatWriter/PICOFormatWriterV2.hpp" />
+		<Unit filename="ParseFolder/ParseFolder.cpp" />
+		<Unit filename="ParseFolder/ParseFolder.hpp" />
+		<Unit filename="TemplMatch.cpp" />
+		<Unit filename="common/UtilityFunctions.cpp" />
+		<Unit filename="common/UtilityFunctions.hpp" />
+		<Unit filename="runOverPICO60Scott.sh" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
