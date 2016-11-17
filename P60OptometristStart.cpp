@@ -38,7 +38,7 @@ std::vector<int> badEvents;
 /*Define how many marks we have per camera*/
 #define NMark0 10 //11
 #define NMark1 9 //10
-#define NMark2 9 //9
+#define NMark2 8 //9
 #define NMark3 9 //9
 
 

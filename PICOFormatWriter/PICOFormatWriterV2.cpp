@@ -73,14 +73,14 @@ void OutputWriter::writeHeader(int NMarkCam0, int NMarkCam1, int NMarkCam2, int 
         Line2<<"%f %f ";
     }
 
-    Line1<<"perspective_transform(4,3,3) ";
+    Line1<<"perspective_transform0(3,3) perspective_transform1(3,3) perspective_transform2(3,3) perspective_transform3(3,3) ";
     for (int i=0; i<4*9; i++){
-        Line2<<"%f ";
+        Line2<<"%.9f ";
     }
 
 
     this->OutFile<<Line1.rdbuf()<<"\n";
-    this->OutFile<<"%12s %5d "<<Line2.rdbuf()<<"\n9\n\n\n";
+    this->OutFile<<"%12s %5d "<<Line2.rdbuf()<<"\n2\n\n\n";
     this->OutFile.close();
 }
 
