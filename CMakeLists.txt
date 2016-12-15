@@ -27,17 +27,10 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/AnalyzerUnit.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/LoadTemplates.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/common/UtilityFunctions.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/NumMarks.hpp
 )
 
 
 
-#add_executable( CountParticulates testbed_opencv.cpp )
-#add_executable( CalcPixelNoiseB camNoiseB.cpp )
-#add_executable( CalcPixelNoiseD camNoiseD.cpp )
 add_executable( P60Optometrist P60OptometristStart.cpp )
-#add_executable( CamNoiseFindTrigger camNoiseFindTrigger.cpp )
-
-#target_link_libraries( CountParticulates ${OpenCV_LIBS})
 target_link_libraries( P60Optometrist ${OpenCV_LIBS} ${SOURCE} ${HEADERS})
-
-#target_link_libraries( CamNoiseFindTrigger ${OpenCV_LIBS} ${SOURCE} ${HEADERS} lbpuser)

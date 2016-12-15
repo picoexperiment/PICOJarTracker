@@ -4,6 +4,9 @@
 #include "LoadTemplates.hpp"
 #include <stdio.h>
 #include <vector>
+#include "NumMarks.hpp"
+
+
 
 void LoadTemplatesSingleCam(std::vector<cv::Mat>& SearchTemplates, int camera, int HowManyTemplates){
 
@@ -33,7 +36,7 @@ void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates){
     std::vector<cv::Mat> _templateDataImg;
 
 
-    for (int i=1; i<=10; i++){
+    for (int i=1; i<=NMark0; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
         _tempReadTemplate = cv::imread(_tfilename, 0);
         _templateDataImg.push_back(_tempReadTemplate);
@@ -64,7 +67,7 @@ void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates){
     std::vector<cv::Mat> _templateDataImg;
 
 
-    for (int i=1; i<=9; i++){
+    for (int i=1; i<=NMark1; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
         _tempReadTemplate = cv::imread(_tfilename, 0);
         _templateDataImg.push_back(_tempReadTemplate);
@@ -80,8 +83,12 @@ void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates){
     FiducialMark templ7 = FiducialMark(1,  595, 886, 6, 5, "templ7.png", _templateDataImg[6]);
     FiducialMark templ8 = FiducialMark(1,  903, 893, 6, 4, "templ8.png", _templateDataImg[7]);
     FiducialMark templ9 = FiducialMark(1,  1207, 881, 5, 4, "templ9.png", _templateDataImg[8]);
+    FiducialMark templ10 = FiducialMark(1,  439, 170, 7, 2, "templ10.png", _templateDataImg[9]);
+    FiducialMark templ11 = FiducialMark(1,  922, 153, 9, 3, "templ11.png", _templateDataImg[10]);
 
-    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9};
+
+
+    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
 
 }
 
@@ -92,23 +99,29 @@ void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates){
     std::vector<cv::Mat> _templateDataImg;
 
 
-    for (int i=1; i<=9; i++){
+    for (int i=1; i<=NMark2; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
         _tempReadTemplate = cv::imread(_tfilename, 0);
         _templateDataImg.push_back(_tempReadTemplate);
         _tempReadTemplate.release();
     }
 
-    FiducialMark templ1 = FiducialMark(2,  610, 706, 7, 6, "templ1.png", _templateDataImg[0]);
-    FiducialMark templ2 = FiducialMark(2,  872, 709, 4, 6, "templ2.png", _templateDataImg[1]);
-    FiducialMark templ3 = FiducialMark(2,  1053, 708, 5, 10, "templ3.png", _templateDataImg[2]);
-    FiducialMark templ4 = FiducialMark(2,  1248, 702, 4, 7, "templ4.png", _templateDataImg[3]);
-    FiducialMark templ5 = FiducialMark(2,  1466, 691, 5, 6, "templ5.png", _templateDataImg[4]);
-    FiducialMark templ6 = FiducialMark(2,  1336, 234, 5, 4, "templ6.png", _templateDataImg[5]);
-    FiducialMark templ7 = FiducialMark(2,  1590, 265, 6, 3, "templ7.png", _templateDataImg[6]);
-    FiducialMark templ8 = FiducialMark(2,  1654, 677, 2, 6, "templ8.png", _templateDataImg[7]);
+    FiducialMark templ1 = FiducialMark(2,  610.0, 706.0, 7, 6, "templ1.png", _templateDataImg[0]);
+    FiducialMark templ2 = FiducialMark(2,  872.0, 709.0, 4, 6, "templ2.png", _templateDataImg[1]);
+    FiducialMark templ3 = FiducialMark(2,  1053.0, 708.0, 5, 10, "templ3.png", _templateDataImg[2]);
+    FiducialMark templ4 = FiducialMark(2,  1248.0, 702.0, 4, 7, "templ4.png", _templateDataImg[3]);
+    FiducialMark templ5 = FiducialMark(2,  1466.0, 691.0, 5, 6, "templ5.png", _templateDataImg[4]);
+    FiducialMark templ6 = FiducialMark(2,  1336.0, 234.0, 5, 4, "templ6.png", _templateDataImg[5]);
+    FiducialMark templ7 = FiducialMark(2,  1590.0, 265.0, 6, 3, "templ7.png", _templateDataImg[6]);
+    FiducialMark templ8 = FiducialMark(2,  1654.0, 677.0, 2, 6, "templ8.png", _templateDataImg[7]);
+    FiducialMark templ9 = FiducialMark(2,  354.0, 872.0, 7, 2, "templ9.png", _templateDataImg[8]);
+    FiducialMark templ10 = FiducialMark(2,  903.0, 886.0, 9, 3, "templ10.png", _templateDataImg[9]);
+    FiducialMark templ11 = FiducialMark(2,  1288.0, 877.0, 6, 2, "templ11.png", _templateDataImg[10]);
 
-    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8};
+
+
+
+    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
 
 }
 
@@ -120,7 +133,7 @@ void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates){
     std::vector<cv::Mat> _templateDataImg;
 
 
-    for (int i=1; i<=9; i++){
+    for (int i=1; i<=NMark3; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
         _tempReadTemplate = cv::imread(_tfilename, 0);
         _templateDataImg.push_back(_tempReadTemplate);
@@ -136,8 +149,12 @@ void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates){
     FiducialMark templ7 = FiducialMark(3,  127, 681, 4, 5, "templ7.png", _templateDataImg[6]);
     FiducialMark templ8 = FiducialMark(3,  429, 838, 7, 2, "templ8.png", _templateDataImg[7]);
     FiducialMark templ9 = FiducialMark(3,  576, 236, 3, 3, "templ9.png", _templateDataImg[8]);
+    FiducialMark templ10 = FiducialMark(3,  920, 823, 8, 1, "templ10.png", _templateDataImg[9]);
+    FiducialMark templ11 = FiducialMark(3,  860, 221, 7, 4, "templ11.png", _templateDataImg[10]);
 
-    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9};
+
+
+    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
 
 }
 
