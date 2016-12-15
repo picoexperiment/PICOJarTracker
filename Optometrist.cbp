@@ -33,6 +33,7 @@
 		<Unit filename="LoadTemplates.cpp" />
 		<Unit filename="LoadTemplates.hpp" />
 		<Unit filename="NicerPlots.hpp" />
+		<Unit filename="NumMarks.hpp" />
 		<Unit filename="P60OptometristStart.cpp" />
 		<Unit filename="PICOFormatWriter/PICOFormatWriterV2.cpp" />
 		<Unit filename="PICOFormatWriter/PICOFormatWriterV2.hpp" />

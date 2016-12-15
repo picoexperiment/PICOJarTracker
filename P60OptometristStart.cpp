@@ -32,14 +32,14 @@
 #include "LoadTemplates.hpp"
 
 
+/*Number of Marks in Each Camera*/
+#include "NumMarks.hpp"
+
+
 const int evalEntropyThresholdFrames = 2;
 std::vector<int> badEvents;
 
-/*Define how many marks we have per camera*/
-#define NMark0 10 //11
-#define NMark1 9 //10
-#define NMark2 8 //9
-#define NMark3 9 //9
+
 
 
 /*Workaround because fermi grid is using old gcc*/

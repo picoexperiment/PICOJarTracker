@@ -78,7 +78,7 @@ void AnalyzerUnit::TrackAllFiducialMarks(void){
         _thisReferencePoint = cv::Point2f(this->Templates[i].TemplateX, this->Templates[i].TemplateY);
         this->ReferencePoints.push_back(_thisReferencePoint);
 
-        //std::cout<<"Template X: "<<_storeEachTemplateBestMatchLoc.x<<" Y: "<<_storeEachTemplateBestMatchLoc.y<<"\n";
+        //std::cout<<"Template X: "<<this->TemplatePos[i].x<<" Y: "<<this->TemplatePos[i].y<<"\n";
         /*GC*/
         _thisReferencePoint = cv::Point2f(0.0,0.0);
         _storeEachTemplateBestMatchLoc = cv::Point2f(0.0,0.0);
@@ -166,7 +166,10 @@ void AnalyzerUnit::TrackAFeature(FiducialMark& Template, cv::Point2f& BestMatchL
  */
 
 void AnalyzerUnit::CalculatePerspectiveShift(void){
-    this->HomographyMatrix = cv::findHomography(this->TemplatePos, this->ReferencePoints, CV_RANSAC, 3 );
+
+
+    this->HomographyMatrix = cv::findHomography(this->TemplatePos, this->ReferencePoints, CV_RANSAC, 3);
+
 }
 
 
