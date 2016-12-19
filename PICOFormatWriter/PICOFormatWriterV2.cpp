@@ -7,6 +7,7 @@
 #include <opencv2/opencv.hpp>
 #include "PICOFormatWriterV2.hpp"
 #include "../common/UtilityFunctions.hpp"
+#include "../NumMarks.hpp"
 
 
 
@@ -30,6 +31,8 @@ OutputWriter::OutputWriter(std::string OutDir, std::string run_number)
     this->TrackedObjectsCam2.StatusCode=-2;
     this->TrackedObjectsCam3.StatusCode=-2;
     //this->OutFile.open(this->abubOutFilename);
+
+    this->thisFrameFailedAnalysis=false;
 
 }
 
@@ -142,7 +145,7 @@ void OutputWriter::stageMarkerOutputError(int camera, int error, int event){
 
 
 
-void OutputWriter::formEachBubbleOutput(int camera, int &nMarkThisCamera){
+void OutputWriter::formEachBubbleOutput(int camera, int nMarkThisCamera){
 
 
 
@@ -159,10 +162,14 @@ void OutputWriter::formEachBubbleOutput(int camera, int &nMarkThisCamera){
 
    if (currentlyWorkingTrackPointer->StatusCode !=0) {
 
-
+        /*Write zero outputs for the objects*/
         for (int i=0; i<nMarkThisCamera; i++){
-            OutLine<<"0.0 0.0 ";
+            OutLine<<-9998<<" "<<-9998<<" ";
         }
+
+        /*Set the flag to not write perspective matrices*/
+        this->thisFrameFailedAnalysis=true;
+
     } else {
     /*Write all outputs here*/
         for (int i=0; i<currentlyWorkingTrackPointer->TrackerObjectData.size(); i++){
@@ -204,17 +211,21 @@ void OutputWriter::formPerspectiveMatrixOutput(int camera){
 }
 
 
+void OutputWriter::formPerspectiveMatrixError(void ){
+
+    std::stringstream TransformMatrix;
+
+    for (int i=0; i<9; i++) TransformMatrix<<-9999<<" ";
+
+    this->_StreamOutputMatrix<<TransformMatrix.rdbuf();
+}
+
+
+
+
 void OutputWriter::writeCameraOutput(std::string EventName){
 
     int ibubImageStart = 1;
-
-    /*Calculate nbubtotal. This is not that trivial because all the errors shouldnt get counted*/
-    int nMark0 = this->TrackedObjectsCam0.StatusCode!=0 ? 0 :  this->TrackedObjectsCam0.TrackerObjectData.size();
-    int nMark1 = this->TrackedObjectsCam1.StatusCode!=0 ? 0 :  this->TrackedObjectsCam1.TrackerObjectData.size();
-    int nMark2 = this->TrackedObjectsCam2.StatusCode!=0 ? 0 :  this->TrackedObjectsCam2.TrackerObjectData.size();
-    int nMark3 = this->TrackedObjectsCam3.StatusCode!=0 ? 0 :  this->TrackedObjectsCam3.TrackerObjectData.size();
-
-    //int nMarkTotal = nMark0+nMark1+nMark2+nMark3;
 
     /*Set up the stream*/
     this->_StreamOutput.clear();
@@ -226,25 +237,37 @@ void OutputWriter::writeCameraOutput(std::string EventName){
 
 
     /*Add to the stream*/
-    this->formEachBubbleOutput(0, nMark0);
-    this->formEachBubbleOutput(1, nMark1);
-    this->formEachBubbleOutput(2, nMark2);
-    this->formEachBubbleOutput(3, nMark3);
+    this->formEachBubbleOutput(0, NMark0);
+    this->formEachBubbleOutput(1, NMark1);
+    this->formEachBubbleOutput(2, NMark2);
+    this->formEachBubbleOutput(3, NMark3);
 
     /*Add transform matrix*/
     this->_StreamOutputMatrix.clear();
     this->_StreamOutputMatrix.precision(5);
     this->_StreamOutputMatrix.setf(std::ios::fixed, std::ios::floatfield);
-    this->formPerspectiveMatrixOutput(0);
-    this->formPerspectiveMatrixOutput(1);
-    this->formPerspectiveMatrixOutput(2);
-    this->formPerspectiveMatrixOutput(3);
 
+    if (this->thisFrameFailedAnalysis){
+        this->formPerspectiveMatrixError(); /*Camera 0*/
+        this->formPerspectiveMatrixError(); /*Camera 1*/
+        this->formPerspectiveMatrixError(); /*Camera 2*/
+        this->formPerspectiveMatrixError(); /*Camera 3*/
+    } else {
+        this->formPerspectiveMatrixOutput(0);
+        this->formPerspectiveMatrixOutput(1);
+        this->formPerspectiveMatrixOutput(2);
+        this->formPerspectiveMatrixOutput(3);
+    }
 
     /*write*/
     this->OutFile.open(this->abubOutFilename, std::fstream::out | std::fstream::app);
     this->OutFile<<this->_StreamOutput.rdbuf()<<" "<<_StreamOutputMatrix.rdbuf()<<"\n";
     this->OutFile.close();
+
+
+    /*Reset*/
+    this->thisFrameFailedAnalysis=false;
+
 }
 
 

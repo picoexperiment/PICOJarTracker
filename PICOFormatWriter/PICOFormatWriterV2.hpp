@@ -54,10 +54,14 @@ class OutputWriter{
         void stageMarkerOutput(std::vector<cv::Point2f>& , int , int, cv::Mat& );
         void stageMarkerOutputError(int, int, int);
 
-        void formEachBubbleOutput(int, int& );
+        void formEachBubbleOutput(int, int );
         void writeCameraOutput(std::string );
         int CalculateNBubCamera(int );
         void formPerspectiveMatrixOutput(int);
+
+
+        bool thisFrameFailedAnalysis;
+        void formPerspectiveMatrixError(void );
 
 
 

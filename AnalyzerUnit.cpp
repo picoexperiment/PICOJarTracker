@@ -43,7 +43,19 @@ AnalyzerUnit::~AnalyzerUnit(void ){
 void AnalyzerUnit::LoadFrameForFiducialTracking(void){
 
     LoadFrameName = this->ImageDir+"cam"+std::to_string(this->CameraNumber)+"_image"+std::to_string(this->AnalyzeFrame)+".png";
-    this->AnalysisFrame=cv::imread(LoadFrameName,0);
+
+
+    if (getFilesize(LoadFrameName) < 1000000) {
+        this->okToProceed=false;
+        std::cout<<"Malformed image: "<<LoadFrameName<<"\n";
+        std::cout<<"Skipping on this event and continue...\n";
+        throw -10;
+    } else {
+
+        this->AnalysisFrame=cv::imread(LoadFrameName,0);
+        this->okToProceed = true;
+
+    }
 
 
 }
