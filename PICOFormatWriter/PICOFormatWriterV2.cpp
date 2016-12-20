@@ -83,7 +83,7 @@ void OutputWriter::writeHeader(int NMarkCam0, int NMarkCam1, int NMarkCam2, int 
 
 
     this->OutFile<<Line1.rdbuf()<<"\n";
-    this->OutFile<<"%12s %5d "<<Line2.rdbuf()<<"\n2\n\n\n";
+    this->OutFile<<"%12s %5d "<<Line2.rdbuf()<<"\n1\n\n\n";
     this->OutFile.close();
 }
 
