@@ -73,13 +73,14 @@ void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNu
     try
     {
         AnalyzerCGeneric->LoadFrameForFiducialTracking();
-        AnalyzerCGeneric->TrackAllFiducialMarks();
+        if (AnalyzerCGeneric->okToProceed) AnalyzerCGeneric->TrackAllFiducialMarks();
         if (AnalyzerCGeneric->okToProceed)
         {
             AnalyzerCGeneric->CalculatePerspectiveShift();
             Pico60Writer->stageMarkerOutput(AnalyzerCGeneric->TemplatePos, camera, actualEventNumber, AnalyzerCGeneric->HomographyMatrix);
         } else  {
             Pico60Writer->stageMarkerOutputError(camera, -5, actualEventNumber);
+            Pico60Writer->thisFrameFailedAnalysis=true;
         }
 
     /*The exception block for camera specific crashes. outputs -6 for the error*/
@@ -88,6 +89,7 @@ void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNu
     {
 
         Pico60Writer->stageMarkerOutputError(camera,-6, actualEventNumber);
+        Pico60Writer->thisFrameFailedAnalysis=true;
     }
 
     delete AnalyzerCGeneric;
@@ -105,9 +107,9 @@ int main(int argc, char** argv)
 
     printf("This is P60Optometrist perspective tracker, the bubble chamber or the camera movement tracker.\n");
 
-    if (argc < 3)
+    if (argc < 4)
     {
-        printf("Not enough parameters.\nUsage: abub <location of data> <run number> <directory for output file>\nEg: ./P60Optometrist /coupp/data/30l-16/ 20160912_4 /home/coupp/recon/\n");
+        printf("Not enough parameters.\nUsage: abub <location of data> <run number> <directory for output file> <template location>\nEg: ./P60Optometrist /coupp/data/30l-16/ 20160912_4 /home/coupp/recon/ /storage/templates/\n");
         printf("Note the trailing slashes.\n");
         return -1;
     }
@@ -115,6 +117,7 @@ int main(int argc, char** argv)
     std::string dataLoc = argv[1];
     std::string run_number = argv[2];
     std::string out_dir = argv[3];
+    std::string tem_dir = argv[4];
 
     std::string eventDir=dataLoc+run_number+"/";
 
@@ -164,10 +167,10 @@ int main(int argc, char** argv)
     std::vector<FiducialMark> CameraTrackObjects1;
     std::vector<FiducialMark> CameraTrackObjects2;
     std::vector<FiducialMark> CameraTrackObjects3;
-    LoadTemplatesCam0(CameraTrackObjects0);
-    LoadTemplatesCam1(CameraTrackObjects1);
-    LoadTemplatesCam2(CameraTrackObjects2);
-    LoadTemplatesCam3(CameraTrackObjects3);
+    LoadTemplatesCam0(CameraTrackObjects0, tem_dir);
+    LoadTemplatesCam1(CameraTrackObjects1, tem_dir);
+    LoadTemplatesCam2(CameraTrackObjects2, tem_dir);
+    LoadTemplatesCam3(CameraTrackObjects3, tem_dir);
 
 
 

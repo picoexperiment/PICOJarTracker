@@ -29,9 +29,9 @@ FiducialMark::FiducialMark(int camera, float TX, float TY, float cX, float cY, s
 
 
 
-void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates){
+void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
-    std::string FileLoc = "cam0/";
+    std::string FileLoc = temLocations+"cam0/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
@@ -60,9 +60,9 @@ void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates){
 
 
 
-void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates){
+void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
-    std::string FileLoc = "cam1/";
+    std::string FileLoc = temLocations+"cam1/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
@@ -92,9 +92,9 @@ void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates){
 
 }
 
-void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates){
+void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
-    std::string FileLoc = "cam2/";
+    std::string FileLoc = temLocations+"cam2/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
@@ -126,9 +126,9 @@ void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates){
 }
 
 
-void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates){
+void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
-    std::string FileLoc = "cam3/";
+    std::string FileLoc = temLocations+"cam3/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 

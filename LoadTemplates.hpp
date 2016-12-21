@@ -32,9 +32,9 @@ struct FiducialMark{
 };
 
 
-void LoadTemplatesCam0(std::vector<FiducialMark>& );
-void LoadTemplatesCam1(std::vector<FiducialMark>& );
-void LoadTemplatesCam2(std::vector<FiducialMark>& );
-void LoadTemplatesCam3(std::vector<FiducialMark>& );
+void LoadTemplatesCam0(std::vector<FiducialMark>&, std::string );
+void LoadTemplatesCam1(std::vector<FiducialMark>&, std::string );
+void LoadTemplatesCam2(std::vector<FiducialMark>&, std::string );
+void LoadTemplatesCam3(std::vector<FiducialMark>&, std::string );
 
 #endif // LoadTemplates_HPP_INCLUDED
