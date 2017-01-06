@@ -184,7 +184,7 @@ int main(int argc, char** argv)
     for (int evi = 0; evi < EventList.size(); evi++)
     {
         std::string imageDir=eventDir+EventList[evi]+"/Images/";
-        printf("\rProcessing event: %s / %d  ... ", EventList[evi].c_str(), EventList.size()-1);
+        printf("\nProcessing event: %s / %d  ... ", EventList[evi].c_str(), EventList.size()-1);
 
 
 
