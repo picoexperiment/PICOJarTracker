@@ -117,11 +117,14 @@ void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string t
     FiducialMark templ9 = FiducialMark(2,  354.0, 872.0, 7, 2, "templ9.png", _templateDataImg[8]);
     FiducialMark templ10 = FiducialMark(2,  903.0, 886.0, 9, 3, "templ10.png", _templateDataImg[9]);
     FiducialMark templ11 = FiducialMark(2,  1288.0, 877.0, 6, 2, "templ11.png", _templateDataImg[10]);
+    FiducialMark templ12 = FiducialMark(2,  549.0, 215.0, 3, 5, "templ12.png", _templateDataImg[11]);
+    FiducialMark templ13 = FiducialMark(2,  873.0, 209.0, 2, 3, "templ13.png", _templateDataImg[12]);
+    FiducialMark templ14 = FiducialMark(2,  1099.0, 217.0, 3, 2, "templ14.png", _templateDataImg[13]);
 
 
 
 
-    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
+    SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11, templ12, templ13, templ14};
 
 }
 
