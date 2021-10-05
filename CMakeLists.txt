@@ -4,12 +4,10 @@ project( CountParticulates )
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} .)
 
-set(OpenCV_LIBS_DIR "/grid/fermiapp/products/coupp/prd/opencv/lib")
-link_directories(${OpenCV_LIBS_DIR})
-set(OpenCV_LIBS opencv_core opencv_imgproc opencv_calib3d opencv_video opencv_features2d opencv_ml opencv_highgui opencv_objdetect opencv_contrib opencv_legacy opencv_gpu)
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
-
-set(CMAKE_CXX_FLAGS "-I/grid/fermiapp/products/coupp/prd/opencv/include/ -std=gnu++1y -m64")
+set(CMAKE_CXX_FLAGS "-I${OpenCV_INCLUDE_DIRS}/")
 set (CMAKE_EXE_LINKER_FLAGS "-Wno-write-strings")
 
 
