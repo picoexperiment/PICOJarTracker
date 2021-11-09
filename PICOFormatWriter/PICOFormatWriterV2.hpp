@@ -60,7 +60,7 @@ class OutputWriter{
         void formPerspectiveMatrixOutput(int);
 
 
-        bool thisFrameFailedAnalysis;
+        bool thisFrameFailedAnalysis[4];
         void formPerspectiveMatrixError(void );
 
 

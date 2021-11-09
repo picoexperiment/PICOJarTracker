@@ -32,7 +32,8 @@ OutputWriter::OutputWriter(std::string OutDir, std::string run_number)
     this->TrackedObjectsCam3.StatusCode=-2;
     //this->OutFile.open(this->abubOutFilename);
 
-    this->thisFrameFailedAnalysis=false;
+    for (int i = 0; i < 4; i++)
+        this->thisFrameFailedAnalysis[i]=false;
 
 }
 
@@ -168,7 +169,7 @@ void OutputWriter::formEachBubbleOutput(int camera, int nMarkThisCamera){
         }
 
         /*Set the flag to not write perspective matrices*/
-        this->thisFrameFailedAnalysis=true;
+        this->thisFrameFailedAnalysis[camera]=true;
 
     } else {
     /*Write all outputs here*/
@@ -247,16 +248,12 @@ void OutputWriter::writeCameraOutput(std::string EventName){
     this->_StreamOutputMatrix.precision(5);
     this->_StreamOutputMatrix.setf(std::ios::fixed, std::ios::floatfield);
 
-    if (this->thisFrameFailedAnalysis){
-        this->formPerspectiveMatrixError(); /*Camera 0*/
-        this->formPerspectiveMatrixError(); /*Camera 1*/
-        this->formPerspectiveMatrixError(); /*Camera 2*/
-        this->formPerspectiveMatrixError(); /*Camera 3*/
-    } else {
-        this->formPerspectiveMatrixOutput(0);
-        this->formPerspectiveMatrixOutput(1);
-        this->formPerspectiveMatrixOutput(2);
-        this->formPerspectiveMatrixOutput(3);
+    for (int i = 0; i < 4; i++){
+        if (this->thisFrameFailedAnalysis[i]){
+            this->formPerspectiveMatrixError();
+        } else {
+            this->formPerspectiveMatrixOutput(i);
+        }
     }
 
     /*write*/
@@ -266,7 +263,8 @@ void OutputWriter::writeCameraOutput(std::string EventName){
 
 
     /*Reset*/
-    this->thisFrameFailedAnalysis=false;
+    for (int i = 0; i < 4; i++)
+        this->thisFrameFailedAnalysis[i]=false;
 
 }
 

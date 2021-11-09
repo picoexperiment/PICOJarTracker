@@ -59,6 +59,7 @@ void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNu
     OutputWriter* Pico60Writer = *P60Output;
 
 
+
     //AnalyzerUnit *AnalyzerC0 = new AnalyzerUnit(EventList[evi], imageDir, 0, CameraTrackObjects0); /*EventID, imageDir and camera number*/
     AnalyzerUnit *AnalyzerCGeneric = new AnalyzerUnit(AEventNumber, ImgDir, camera, CameraTrackObjects); /*EventID, imageDir and camera number*/
 
@@ -80,16 +81,15 @@ void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNu
             Pico60Writer->stageMarkerOutput(AnalyzerCGeneric->TemplatePos, camera, actualEventNumber, AnalyzerCGeneric->HomographyMatrix);
         } else  {
             Pico60Writer->stageMarkerOutputError(camera, -5, actualEventNumber);
-            Pico60Writer->thisFrameFailedAnalysis=true;
+            Pico60Writer->thisFrameFailedAnalysis[camera]=true;
         }
 
     /*The exception block for camera specific crashes. outputs -6 for the error*/
     }
     catch (...)
     {
-
         Pico60Writer->stageMarkerOutputError(camera,-6, actualEventNumber);
-        Pico60Writer->thisFrameFailedAnalysis=true;
+        Pico60Writer->thisFrameFailedAnalysis[camera]=true;
     }
 
     delete AnalyzerCGeneric;
@@ -120,6 +120,8 @@ int main(int argc, char** argv)
     std::string tem_dir = argv[4];
 
     std::string eventDir=dataLoc+run_number+"/";
+
+
 
 
     /*I anticipate the object to become large with many bubbles, so I wanted it on the heap*/
