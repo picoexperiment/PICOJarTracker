@@ -110,7 +110,6 @@ int main(int argc, char** argv)
     if (argc < 4)
     {
         printf("Not enough parameters.\nUsage: abub <location of data> <run number> <directory for output file> <template location>\nEg: ./P60Optometrist /coupp/data/30l-16/ 20160912_4 /home/coupp/recon/ /storage/templates/\n");
-        printf("Note the trailing slashes.\n");
         return -1;
     }
 
@@ -119,10 +118,11 @@ int main(int argc, char** argv)
     std::string out_dir = argv[3];
     std::string tem_dir = argv[4];
 
+    if (dataLoc.find_last_of("/") != dataLoc.size()-1) dataLoc+="/";
+    if (out_dir.find_last_of("/") != out_dir.size()-1) out_dir+="/";
+    if (tem_dir.find_last_of("/") != tem_dir.size()-1) tem_dir+="/";
+
     std::string eventDir=dataLoc+run_number+"/";
-
-
-
 
     /*I anticipate the object to become large with many bubbles, so I wanted it on the heap*/
     OutputWriter *PICO60Output = new OutputWriter(out_dir, run_number);
