@@ -129,7 +129,7 @@ void AnalyzerUnit::TrackAFeature(FiducialMark& Template, cv::Point2f& BestMatchL
 
 
     // Do the Matching and Normalize
-    int match_method=CV_TM_SQDIFF;
+    int match_method=CV_TM_SQDIFF_NORMED;
     cv::matchTemplate( _AnaFrameSmallROI, Template.TemplateImage, result, match_method );
     cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
 

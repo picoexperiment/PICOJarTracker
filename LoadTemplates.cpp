@@ -54,12 +54,13 @@ void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string t
     // FiducialMark templ9 = FiducialMark(0,  281, 557, 0, 0, "templ9.png", _templateDataImg[8]);
     // FiducialMark templ10 = FiducialMark(0,  142, 312, 0, 0, "templ10.png", _templateDataImg[9]);
 
-    FiducialMark templ1  = FiducialMark(0,  350, 749, 0, 0, "templ1.png",  _templateDataImg[0]);
-    FiducialMark templ2  = FiducialMark(0,  940, 716, 0, 0, "templ2.png",  _templateDataImg[1]);
-    FiducialMark templ3  = FiducialMark(0,  460, 660, 0, 0, "templ3.png",  _templateDataImg[2]);
-    FiducialMark templ4  = FiducialMark(0,  790, 651, 0, 0, "templ4.png",  _templateDataImg[3]);
-    FiducialMark templ5  = FiducialMark(0,  645, 310, 0, 0, "templ5.png",  _templateDataImg[4]);
-    FiducialMark templ6  = FiducialMark(0,  1176, 350, 0, 0, "templ6.png",  _templateDataImg[5]);
+    FiducialMark templ1  = FiducialMark(0,  350, 749, 0, 0, "templ1.png",  _templateDataImg[0]);    //lower front 1
+    FiducialMark templ2  = FiducialMark(0,  940, 716, 0, 0, "templ2.png",  _templateDataImg[1]);    //lower front 3
+    FiducialMark templ3  = FiducialMark(0,  460, 660, 0, 0, "templ3.png",  _templateDataImg[2]);    //middle back 1
+    FiducialMark templ4  = FiducialMark(0,  792, 652, 0, 0, "templ4.png",  _templateDataImg[3]);    //middle back 3
+    FiducialMark templ5  = FiducialMark(0,  645, 310, 0, 0, "templ5.png",  _templateDataImg[4]);    //upper front 0
+    FiducialMark templ6  = FiducialMark(0,  999, 335, 0, 0, "templ6.png",  _templateDataImg[5]);   //upper back 4
+    
     // FiducialMark templ7  = FiducialMark(0,  , , 0, 0, "templ7.png",  _templateDataImg[6]);
     // FiducialMark templ8  = FiducialMark(0,  , , 0, 0, "templ8.png",  _templateDataImg[7]);
     // FiducialMark templ9  = FiducialMark(0,  , , 0, 0, "templ9.png",  _templateDataImg[8]);
@@ -100,12 +101,12 @@ void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string t
     // FiducialMark templ10 = FiducialMark(1,  439, 170, 7, 2, "templ10.png", _templateDataImg[9]);
     // FiducialMark templ11 = FiducialMark(1,  922, 153, 9, 3, "templ11.png", _templateDataImg[10]);
 
-    FiducialMark templ1  = FiducialMark(1,  275, 728, 0, 0, "templ1.png", _templateDataImg[0]);
-    FiducialMark templ2  = FiducialMark(1,  593, 712, 0, 0, "templ2.png", _templateDataImg[1]);
-    FiducialMark templ3  = FiducialMark(1,  918, 710, 0, 0, "templ3.png", _templateDataImg[2]);
-    FiducialMark templ4  = FiducialMark(1, 1304, 718, 0, 0, "templ4.png", _templateDataImg[3]);
-    FiducialMark templ5  = FiducialMark(1,  328, 632, 0, 0, "templ5.png", _templateDataImg[4]);
-    FiducialMark templ6  = FiducialMark(1,  744, 256, 0, 0, "templ6.png", _templateDataImg[5]);
+    FiducialMark templ1  = FiducialMark(1,  275, 728, 0, 0, "templ1.png", _templateDataImg[0]); //lower front 1
+    FiducialMark templ2  = FiducialMark(1,  593, 712, 0, 0, "templ2.png", _templateDataImg[1]); //lower front 2
+    FiducialMark templ3  = FiducialMark(1,  918, 710, 0, 0, "templ3.png", _templateDataImg[2]); //lower front 3
+    FiducialMark templ4  = FiducialMark(1, 1304, 718, 0, 0, "templ4.png", _templateDataImg[3]); //lower front 4
+    FiducialMark templ5  = FiducialMark(1,  328, 632, 0, 0, "templ5.png", _templateDataImg[4]); //middle back 1
+    FiducialMark templ6  = FiducialMark(1,  746, 257, 0, 0, "templ6.png", _templateDataImg[5]); //upper back -3
     // FiducialMark templ7  = FiducialMark(1,  , , 0, 0, "templ7.png", _templateDataImg[6]);
     // FiducialMark templ8  = FiducialMark(1,  , , 0, 0, "templ8.png", _templateDataImg[7]);
     // FiducialMark templ9  = FiducialMark(1,  , , 0, 0, "templ9.png", _templateDataImg[8]);
@@ -147,12 +148,12 @@ void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string t
     // FiducialMark templ13 = FiducialMark(2,  873.0, 209.0, 2, 3, "templ13.png", _templateDataImg[12]);
     // FiducialMark templ14 = FiducialMark(2,  1099.0, 217.0, 3, 2, "templ14.png", _templateDataImg[13]);
 
-    FiducialMark templ1  = FiducialMark(2,  582, 704, 0, 0, "templ1.png", _templateDataImg[0]);
-    FiducialMark templ2  = FiducialMark(2, 1198, 654, 0, 0, "templ2.png", _templateDataImg[1]);
-    FiducialMark templ3  = FiducialMark(2,  318, 398, 0, 0, "templ3.png", _templateDataImg[2]);
-    FiducialMark templ4  = FiducialMark(2,  546, 247, 0, 0, "templ4.png", _templateDataImg[3]);
-    FiducialMark templ5  = FiducialMark(2,  859, 240, 0, 0, "templ5.png", _templateDataImg[4]);
-    FiducialMark templ6  = FiducialMark(2, 1148, 232, 0, 0, "templ6.png", _templateDataImg[5]);
+    FiducialMark templ1  = FiducialMark(2,  582, 704, 0, 0, "templ1.png", _templateDataImg[0]); //lower front 1
+    FiducialMark templ2  = FiducialMark(2, 1198, 654, 0, 0, "templ2.png", _templateDataImg[1]); //lower front 2
+    FiducialMark templ3  = FiducialMark(2,  318, 398, 0, 0, "templ3.png", _templateDataImg[2]); //upper back 1
+    FiducialMark templ4  = FiducialMark(2,  546, 247, 0, 0, "templ4.png", _templateDataImg[3]); //upper front 1
+    FiducialMark templ5  = FiducialMark(2,  859, 240, 0, 0, "templ5.png", _templateDataImg[4]); //upper front 2
+    FiducialMark templ6  = FiducialMark(2, 1148, 232, 0, 0, "templ6.png", _templateDataImg[5]); //upper front 3
     // FiducialMark templ7  = FiducialMark(2,  0, 0, 0, 0, "templ7.png", _templateDataImg[6]);
     // FiducialMark templ8  = FiducialMark(2,  0, 0, 0, 0, "templ8.png", _templateDataImg[7]);
     // FiducialMark templ9  = FiducialMark(2,  0, 0, 0, 0, "templ9.png", _templateDataImg[8]);
