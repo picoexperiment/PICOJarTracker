@@ -15,8 +15,7 @@
 
 
 #define SubPixelAveragingGrid 1
-
-bool SAVE_DEBUG_IMAGES = false;
+#define SAVE_DEBUG_IMAGES false
 
 
 AnalyzerUnit::AnalyzerUnit(std::string EventID, std::string ImageDir, int CameraNumber, std::vector<FiducialMark>& Templates)

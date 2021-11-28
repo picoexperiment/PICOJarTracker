@@ -6,7 +6,7 @@
 #include <vector>
 #include "NumMarks.hpp"
 
-bool SAVE_DEBUG_IMAGES = false;
+#define SAVE_DEBUG_IMAGES false
 
 // Currently doesn't seem to help much, so disabled.
 void ProcessImage(cv::Mat& image){
