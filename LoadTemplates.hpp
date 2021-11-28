@@ -5,6 +5,10 @@
 #include <stdio.h>
 #include <vector>
 
+void IncreaseContrast(cv::Mat& tempReadTemplate_raw, double contrast);
+void GammaCorrection(cv::Mat& src, float fGamma);
+void ProcessImage(cv::Mat& image);
+
 void LoadTemplatesSingleCam(std::vector<cv::Mat>&, int, int);
 
 

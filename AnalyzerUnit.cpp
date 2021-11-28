@@ -16,6 +16,7 @@
 
 #define SubPixelAveragingGrid 1
 
+bool SAVE_DEBUG_IMAGES = false;
 
 
 AnalyzerUnit::AnalyzerUnit(std::string EventID, std::string ImageDir, int CameraNumber, std::vector<FiducialMark>& Templates)
@@ -58,6 +59,8 @@ void AnalyzerUnit::LoadFrameForFiducialTracking(void){
     } else {
 
         this->AnalysisFrame=cv::imread(LoadFrameName,0);
+        ProcessImage(AnalysisFrame);
+        if (SAVE_DEBUG_IMAGES) cv::imwrite(EventID+"_cam"+std::to_string(CameraNumber)+".png",AnalysisFrame);
         this->okToProceed = true;
 
     }
@@ -129,7 +132,7 @@ void AnalyzerUnit::TrackAFeature(FiducialMark& Template, cv::Point2f& BestMatchL
 
 
     // Do the Matching and Normalize
-    int match_method=CV_TM_SQDIFF_NORMED;
+    int match_method=CV_TM_CCORR_NORMED;
     cv::matchTemplate( _AnaFrameSmallROI, Template.TemplateImage, result, match_method );
     cv::normalize( result, result, 0, 1, cv::NORM_MINMAX, -1, cv::Mat() );
 
