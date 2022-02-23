@@ -7,6 +7,10 @@
 #include <opencv2/opencv.hpp>
 #include "LoadTemplates.hpp"
 
+#include "ParseFolder/Parser.hpp"
+#include "ParseFolder/RawParser.hpp"
+#include "ParseFolder/ZipParser.hpp"
+
 
 class AnalyzerUnit{
 
@@ -27,12 +31,13 @@ class AnalyzerUnit{
         /*List of all the frames belonging to the particular event in question*/
         int CameraNumber;
 
+        Parser *FileParser;
 
 
 
     public:
         /*Constructor and deconstructor*/
-        AnalyzerUnit(std::string, std::string, int, std::vector<FiducialMark>&);
+        AnalyzerUnit(std::string, std::string, int, std::vector<FiducialMark>&, Parser*);
         ~AnalyzerUnit(void );
 
         /*Function to parse and sort the triggers from the folder and the directory where the images are stored*/

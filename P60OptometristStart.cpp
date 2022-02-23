@@ -31,6 +31,9 @@
 #include "common/UtilityFunctions.hpp"
 #include "LoadTemplates.hpp"
 
+#include "ParseFolder/Parser.hpp"
+#include "ParseFolder/RawParser.hpp"
+#include "ParseFolder/ZipParser.hpp"
 
 /*Number of Marks in Each Camera*/
 #include "NumMarks.hpp"
@@ -54,14 +57,14 @@ bool eventNameOrderSort(std::string a, std::string b)
 
 
 
-void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNumber, std::string ImgDir, int camera, std::vector<FiducialMark>& CameraTrackObjects){
+void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNumber, std::string ImgDir, int camera, std::vector<FiducialMark>& CameraTrackObjects, Parser* FileParser){
 
     OutputWriter* Pico60Writer = *P60Output;
 
 
 
     //AnalyzerUnit *AnalyzerC0 = new AnalyzerUnit(EventList[evi], imageDir, 0, CameraTrackObjects0); /*EventID, imageDir and camera number*/
-    AnalyzerUnit *AnalyzerCGeneric = new AnalyzerUnit(AEventNumber, ImgDir, camera, CameraTrackObjects); /*EventID, imageDir and camera number*/
+    AnalyzerUnit *AnalyzerCGeneric = new AnalyzerUnit(AEventNumber, ImgDir, camera, CameraTrackObjects, FileParser); /*EventID, imageDir and camera number*/
 
     /*We need the actual event number in case folders with events are missing*/
     int actualEventNumber = atoi(AEventNumber.c_str());
@@ -118,6 +121,9 @@ int main(int argc, char** argv)
     std::string out_dir = argv[3];
     std::string tem_dir = argv[4];
 
+    std::string storage_format = "raw";
+    if (argc >= 6){ storage_format = argv[5]; }
+
     if (dataLoc.find_last_of("/") != dataLoc.size()-1) dataLoc+="/";
     if (out_dir.find_last_of("/") != out_dir.size()-1) out_dir+="/";
     if (tem_dir.find_last_of("/") != tem_dir.size()-1) tem_dir+="/";
@@ -128,13 +134,32 @@ int main(int argc, char** argv)
     OutputWriter *PICO60Output = new OutputWriter(out_dir, run_number);
     PICO60Output->writeHeader(NMark0,NMark1,NMark2,NMark3);
 
+    /* File parser stuff */
+    std::string imageFormat = "cam%d_image%u.png";
+    std::string imageFolder = "/Images/";
+    Parser *FileParser;
+    /* The Parser reads directories/zip files and retreives image data */
+    if (storage_format == "raw"){
+        FileParser = new RawParser(eventDir, imageFolder, imageFormat);
+    }
+    else if (storage_format == "zip"){
+        FileParser = new ZipParser(eventDir, imageFolder, imageFormat);
+    }
+    else {
+        std::cout << "Unknown storage format from command line arguments: " << storage_format << std::endl;
+        //for (int icam = 0; icam < 4; icam++){ PICO60Output->stageMarkerOutputError(icam, -10, -1); }
+        //PICO60Output->writeCameraOutput();
+        return -10;
+    }
+
     /*Construct list of events*/
     std::vector<std::string> EventList;
     int* EVstatuscode = 0;
     std::cout<<eventDir<<"\n";
     try
     {
-        GetEventDirLists(eventDir.c_str(), EventList, EVstatuscode);
+        //GetEventDirLists(eventDir.c_str(), EventList, EVstatuscode);
+        FileParser->GetEventDirLists(EventList);
 
     /*Crash handler at the begining of the program - writes -5 if the folder could not be read*/
     }
@@ -191,10 +216,10 @@ int main(int argc, char** argv)
 
 
 
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 0, CameraTrackObjects0);
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 1, CameraTrackObjects1 );
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 2, CameraTrackObjects2 );
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 3, CameraTrackObjects3);
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 0, CameraTrackObjects0, FileParser);
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 1, CameraTrackObjects1, FileParser );
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 2, CameraTrackObjects2, FileParser );
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 3, CameraTrackObjects3, FileParser);
 
 
 
@@ -206,6 +231,7 @@ int main(int argc, char** argv)
     }
 
     delete PICO60Output;
+    delete FileParser;
 
 
 

@@ -18,7 +18,7 @@
 #define SAVE_DEBUG_IMAGES false
 
 
-AnalyzerUnit::AnalyzerUnit(std::string EventID, std::string ImageDir, int CameraNumber, std::vector<FiducialMark>& Templates)
+AnalyzerUnit::AnalyzerUnit(std::string EventID, std::string ImageDir, int CameraNumber, std::vector<FiducialMark>& Templates, Parser* FileParser)
 {
     /*Give the properties required to make the object - the identifiers i.e. the camera number, and location*/
     this->ImageDir=ImageDir;
@@ -27,7 +27,7 @@ AnalyzerUnit::AnalyzerUnit(std::string EventID, std::string ImageDir, int Camera
 
     this->Templates = Templates;
 
-
+    this->FileParser = FileParser;
 }
 
 AnalyzerUnit::~AnalyzerUnit(void ){
@@ -45,6 +45,7 @@ AnalyzerUnit::~AnalyzerUnit(void ){
 void AnalyzerUnit::LoadFrameForFiducialTracking(void){
 
     LoadFrameName = this->ImageDir+"cam"+std::to_string(this->CameraNumber)+"_image"+std::to_string(this->AnalyzeFrame)+".png";
+    std::string thisFrameName = "cam" + std::to_string(this->CameraNumber) + "_image" + std::to_string(this->AnalyzeFrame) + ".png";
 
     if (getFilesize(LoadFrameName) == 0){ //Camera was off
         this->okToProceed=false;
@@ -57,7 +58,8 @@ void AnalyzerUnit::LoadFrameForFiducialTracking(void){
         throw -10;
     } else {
 
-        this->AnalysisFrame=cv::imread(LoadFrameName,0);
+//        this->AnalysisFrame=cv::imread(LoadFrameName,0);
+        this->FileParser->GetImage(std::to_string(this->AnalyzeFrame), thisFrameName, this->AnalysisFrame);
         ProcessImage(AnalysisFrame);
         if (SAVE_DEBUG_IMAGES) cv::imwrite(EventID+"_cam"+std::to_string(CameraNumber)+".png",AnalysisFrame);
         this->okToProceed = true;
