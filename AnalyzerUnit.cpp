@@ -59,7 +59,7 @@ void AnalyzerUnit::LoadFrameForFiducialTracking(void){
     } else {
 
 //        this->AnalysisFrame=cv::imread(LoadFrameName,0);
-        this->FileParser->GetImage(std::to_string(this->AnalyzeFrame), thisFrameName, this->AnalysisFrame);
+        this->FileParser->GetImage(this->EventID, thisFrameName, this->AnalysisFrame);
         ProcessImage(AnalysisFrame);
         if (SAVE_DEBUG_IMAGES) cv::imwrite(EventID+"_cam"+std::to_string(CameraNumber)+".png",AnalysisFrame);
         this->okToProceed = true;
