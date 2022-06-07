@@ -47,6 +47,8 @@ void AnalyzerUnit::LoadFrameForFiducialTracking(void){
     LoadFrameName = this->ImageDir+"cam"+std::to_string(this->CameraNumber)+"_image"+std::to_string(this->AnalyzeFrame)+".png";
     std::string thisFrameName = "cam" + std::to_string(this->CameraNumber) + "_image" + std::to_string(this->AnalyzeFrame) + ".png";
 
+    // REPLACE THIS CODE LATER - once Parser->GetImage has error codes
+    /*
     if (getFilesize(LoadFrameName) == 0){ //Camera was off
         this->okToProceed=false;
 	throw -11;
@@ -65,7 +67,16 @@ void AnalyzerUnit::LoadFrameForFiducialTracking(void){
         this->okToProceed = true;
 
     }
-
+*/
+    if (this->FileParser->GetImage(this->EventID, thisFrameName, this->AnalysisFrame)){
+        ProcessImage(AnalysisFrame);
+        if (SAVE_DEBUG_IMAGES) cv::imwrite(EventID+"_cam"+std::to_string(CameraNumber)+".png",this->AnalysisFrame);
+        this->okToProceed = true;
+    }
+    else {
+        this->okToProceed=false;
+        throw -10;
+    }
 
 }
 

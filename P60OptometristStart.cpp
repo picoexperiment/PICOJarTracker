@@ -214,12 +214,19 @@ int main(int argc, char** argv)
         printf("\nProcessing event: %s / %d  ... ", EventList[evi].c_str(), EventList.size()-1);
 
 
-
-
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 0, CameraTrackObjects0, FileParser);
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 1, CameraTrackObjects1, FileParser );
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 2, CameraTrackObjects2, FileParser );
-        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 3, CameraTrackObjects3, FileParser);
+/*
+        for (int icam = 0; icam < 4; icam++){
+            Parser *tp = FileParser->clone();
+            RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, icam, CameraTrackObjects0, tp);
+            delete tp;
+        }
+*/
+        Parser *tp = FileParser->clone();
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 0, CameraTrackObjects0, tp);//FileParser);
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 1, CameraTrackObjects1, tp);//FileParser);
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 2, CameraTrackObjects2, tp);//FileParser);
+        RunEachCameraAnalysisMachine(&PICO60Output, EventList[evi], imageDir, 3, CameraTrackObjects3, tp);//FileParser);
+        delete tp;
 
 
 
