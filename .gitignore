@@ -4,3 +4,4 @@ P60Optometrist
 cmake_install.cmake
 Makefile
 *.swp
+*.so
