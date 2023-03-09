@@ -9,6 +9,9 @@ find_package(Boost REQUIRED COMPONENTS regex filesystem program_options QUIET)
 execute_process(COMMAND git submodule update --init --recursive)
 
 include_directories(${OpenCV_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/minizip-ng/)
+execute_process(COMMAND git submodule update --init --recursive
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  RESULT_VARIABLE SUBMOD_RESULT)
 
 # Minizip-ng options override - Only compile Zlib support
 set(MZ_COMPAT OFF CACHE BOOL "Enable compatibility layer with minizip
@@ -78,3 +81,7 @@ add_executable( P60Optometrist P60OptometristStart.cpp )
 target_include_directories(P60Optometrist PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/minizip-ng/)
 target_link_libraries( P60Optometrist ${OpenCV_LIBS} ${SOURCE} ${HEADERS} AbubUtility
     minizip)
+
+if(NOT SUBMOD_RESULT EQUAL "0")
+  message("\n\nFailed to retrieve submodules with error code ${SUBMOD_RESULT}.\n\n")
+endif()
