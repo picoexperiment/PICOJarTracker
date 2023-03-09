@@ -110,9 +110,9 @@ int main(int argc, char** argv)
 
     printf("This is P60Optometrist perspective tracker, the bubble chamber or the camera movement tracker.\n");
 
-    if (argc < 4)
+    if (argc < 5)
     {
-        printf("Not enough parameters.\nUsage: abub <location of data> <run number> <directory for output file> <template location>\nEg: ./P60Optometrist /coupp/data/30l-16/ 20160912_4 /home/coupp/recon/ /storage/templates/\n");
+        printf("Not enough parameters.\nUsage: P60Optometrist <location of data> <run number> <directory for output file> <template location> <storage format>\nEg: ./P60Optometrist /coupp/data/30l-16/ 20160912_4 /home/coupp/recon/ /storage/templates/ zip\n");
         return -1;
     }
 
