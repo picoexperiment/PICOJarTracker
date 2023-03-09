@@ -7,7 +7,6 @@
 #include <opencv2/opencv.hpp>
 #include "PICOFormatWriterV2.hpp"
 #include "../common/UtilityFunctions.hpp"
-#include "../NumMarks.hpp"
 
 
 
@@ -49,7 +48,12 @@ OutputWriter::TrackedObjectData::TrackedObjectData(){};
  * This function writes the header file for abub3 output
  */
 
-void OutputWriter::writeHeader(int NMarkCam0, int NMarkCam1, int NMarkCam2, int NMarkCam3 ){
+void OutputWriter::writeHeader(int aNMarkCam0, int aNMarkCam1, int aNMarkCam2, int aNMarkCam3 ){
+
+    NMarkCam0 = aNMarkCam0;
+    NMarkCam1 = aNMarkCam1;
+    NMarkCam2 = aNMarkCam2;
+    NMarkCam3 = aNMarkCam3;
 
     std::stringstream Line1;
     std::stringstream Line2;
@@ -238,10 +242,10 @@ void OutputWriter::writeCameraOutput(std::string EventName){
 
 
     /*Add to the stream*/
-    this->formEachBubbleOutput(0, NMark0);
-    this->formEachBubbleOutput(1, NMark1);
-    this->formEachBubbleOutput(2, NMark2);
-    this->formEachBubbleOutput(3, NMark3);
+    this->formEachBubbleOutput(0, NMarkCam0);
+    this->formEachBubbleOutput(1, NMarkCam1);
+    this->formEachBubbleOutput(2, NMarkCam2);
+    this->formEachBubbleOutput(3, NMarkCam3);
 
     /*Add transform matrix*/
     this->_StreamOutputMatrix.clear();

@@ -4,7 +4,6 @@
 #include "LoadTemplates.hpp"
 #include <stdio.h>
 #include <vector>
-#include "NumMarks.hpp"
 
 #define SAVE_DEBUG_IMAGES false
 
@@ -76,12 +75,13 @@ FiducialMark::FiducialMark(int camera, float TX, float TY, float cX, float cY, s
 
 
 
-void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+int LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam0/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
+    int NMark0 = 6;//10 //11
 
     for (int i=1; i<=NMark0; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
@@ -120,17 +120,18 @@ void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string t
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
-
+    return NMark0;
 }
 
 
 
-void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+int LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam1/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
+    int NMark1 = 6;//11 //10
 
     for (int i=1; i<=NMark1; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
@@ -171,14 +172,16 @@ void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string t
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
+    return NMark1;
 }
 
-void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+int LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam2/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
+    int NMark2 = 6;//14 //9
 
     for (int i=1; i<=NMark2; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
@@ -225,15 +228,17 @@ void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string t
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11, templ12, templ13, templ14};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
+    return NMark2;
 }
 
 
-void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+int LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam3/";
     cv::Mat _tempReadTemplate;
     std::vector<cv::Mat> _templateDataImg;
 
+    int NMark3 = 6;//11 //9
 
     for (int i=1; i<=NMark3; i++){
         std::string _tfilename=FileLoc+"templ"+std::to_string(i)+".png";
@@ -274,6 +279,7 @@ void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string t
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
+    return NMark3;
 }
 
 

@@ -12,8 +12,6 @@ void ProcessImage(cv::Mat& image);
 void LoadTemplatesSingleCam(std::vector<cv::Mat>&, int, int);
 
 
-
-
 /*ReferenceTemplates*/
 
 struct FiducialMark{
@@ -36,9 +34,9 @@ struct FiducialMark{
 };
 
 
-void LoadTemplatesCam0(std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam1(std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam2(std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam3(std::vector<FiducialMark>&, std::string );
+int LoadTemplatesCam0(std::vector<FiducialMark>&, std::string );
+int LoadTemplatesCam1(std::vector<FiducialMark>&, std::string );
+int LoadTemplatesCam2(std::vector<FiducialMark>&, std::string );
+int LoadTemplatesCam3(std::vector<FiducialMark>&, std::string );
 
 #endif // LoadTemplates_HPP_INCLUDED
