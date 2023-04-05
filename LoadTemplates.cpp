@@ -76,7 +76,7 @@ void LoadTemplatesSingleCam(std::vector<cv::Mat>& SearchTemplates, int camera, i
 FiducialMark::FiducialMark(int camera, float TX, float TY, float cX, float cY, std::string FileLocAndName, cv::Mat TImage):
     camera(camera), TemplateX(TX), TemplateY(TY), correctionsX(cX), correctionsY(cY), TemplateFileName(FileLocAndName), TemplateImage(TImage){}
 
-void LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+bool LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
     std::vector<double> Xs;
     std::vector<double> Ys;
     std::vector<double> cXs;
@@ -87,7 +87,7 @@ void LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
     fin.open(ConfigFileLoc);
     if (!fin.is_open()){
         std::cout << "Templates config file not found at " << ConfigFileLoc << std::endl;
-        return;
+        return -1;
     }
     double templ, X, Y, cX, cY;
     std::string head;
@@ -125,12 +125,18 @@ void LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
         std::string templName = "templ"+std::to_string(i)+".png";
         std::string _tfilename=TemplFileLoc+templName;
         _tempReadTemplate = cv::imread(_tfilename, 0);
+        if (_tempReadTemplate.empty()){
+            std::cout << "Failed to load template " << _tfilename << std::endl;
+            return -2;
+        }
         ProcessImage(_tempReadTemplate);
-        _tempReadTemplate.release();
         FiducialMark templ  = FiducialMark(camera,  Xs[i-1], Ys[i-1], cXs[i-1], cYs[i-1], templName,  _tempReadTemplate);
         if (SAVE_DEBUG_IMAGES) cv::imwrite("cam"+std::to_string(camera)+"_"+templName,_tempReadTemplate);
         SearchTemplates.push_back(templ);
+        _tempReadTemplate.release();
     }
+    
+    return 0;
 }
 
 void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){

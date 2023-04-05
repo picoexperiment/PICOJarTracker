@@ -223,10 +223,15 @@ int main(int argc, char** argv)
     LoadTemplatesCam1(CameraTrackObjects1, tem_dir);
     LoadTemplatesCam2(CameraTrackObjects2, tem_dir);
     LoadTemplatesCam3(CameraTrackObjects3, tem_dir);*/
-    LoadTemplatesConfig(0,CameraTrackObjects0, tem_dir);
-    LoadTemplatesConfig(1,CameraTrackObjects1, tem_dir);
-    LoadTemplatesConfig(2,CameraTrackObjects2, tem_dir);
-    LoadTemplatesConfig(3,CameraTrackObjects3, tem_dir);
+    int templLoadStatus = 0;
+    templLoadStatus += LoadTemplatesConfig(0,CameraTrackObjects0, tem_dir);
+    templLoadStatus += LoadTemplatesConfig(1,CameraTrackObjects1, tem_dir);
+    templLoadStatus += LoadTemplatesConfig(2,CameraTrackObjects2, tem_dir);
+    templLoadStatus += LoadTemplatesConfig(3,CameraTrackObjects3, tem_dir);
+    if (templLoadStatus != 0){
+        std::cout << "Failed to load templates. Optometrist cannot continue." << std::endl;
+        return -2;
+    }
 
     /*I anticipate the object to become large with many bubbles, so I wanted it on the heap*/
     OutputWriter *PICO60Output = new OutputWriter(out_dir, run_number);
