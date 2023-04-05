@@ -76,41 +76,61 @@ void LoadTemplatesSingleCam(std::vector<cv::Mat>& SearchTemplates, int camera, i
 FiducialMark::FiducialMark(int camera, float TX, float TY, float cX, float cY, std::string FileLocAndName, cv::Mat TImage):
     camera(camera), TemplateX(TX), TemplateY(TY), correctionsX(cX), correctionsY(cY), TemplateFileName(FileLocAndName), TemplateImage(TImage){}
 
-bool LoadTemplatesConfig(int camera, std::string temLocations, std::vector<double>& Xs, std::vector<double>& Ys, std::vector<double>& cXs, std::vector<double>& cYs){
-  std::ifstream fin;
-  std::string FileLoc = temLocations+"templ.cfg";
-  fin.open(FileLoc);
-  if (!fin.is_open()){
-    std::cout << "Templates config file not found at " << FileLoc << std::endl;
-    return 1;
-  }
-  double templ, X, Y, cX, cY;
-  std::string head;
-  bool head_found = false;
-  while (!fin.eof()){
-    std::string line;
-    getline(fin,line);
-    std::stringstream ss(line);
-    if (ss.str()[0] == '#' || ss.str() == "" || ss.str()[0] == ' '){
-      //std::cout << "Ignoring: " << line << std::endl;
-      continue;
+void LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+    std::vector<double> Xs;
+    std::vector<double> Ys;
+    std::vector<double> cXs;
+    std::vector<double> cYs;
+    SearchTemplates.clear();
+    std::ifstream fin;
+    std::string ConfigFileLoc = temLocations+"templ.cfg";
+    fin.open(ConfigFileLoc);
+    if (!fin.is_open()){
+        std::cout << "Templates config file not found at " << ConfigFileLoc << std::endl;
+        return;
     }
-    if (!head_found){   //Find camera header
-        ss >> head;
-        if (head == "cam"+std::to_string(camera)){
-            head_found = true;
+    double templ, X, Y, cX, cY;
+    std::string head;
+    bool head_found = false;
+    while (!fin.eof()){
+        std::string line;
+        getline(fin,line);
+        std::stringstream ss(line);
+        if (ss.str()[0] == '#' || ss.str() == "" || ss.str()[0] == ' '){
+            //std::cout << "Ignoring: " << line << std::endl;
+            continue;
         }
-        continue;
+        if (!head_found){   //Find camera header
+            ss >> head;
+            if (head == "cam"+std::to_string(camera)){
+                head_found = true;
+            }
+            continue;
+        }
+        if (ss.str()[0] == 'c') break;  //At next header, so leave now
+        ss >> templ >> X >> Y >> cX >> cY;
+        if (fin.eof()) break;
+        Xs.push_back(X);
+        Ys.push_back(Y);
+        cXs.push_back(cX);
+        cYs.push_back(cY);
     }
-    if (ss.str()[0] == 'c') break;  //At next header, so leave now
-    ss >> templ >> X >> Y >> cX >> cY;
-    if (fin.eof()) break;
-    Xs.push_back(X);
-    Ys.push_back(Y);
-    cXs.push_back(cX);
-    cYs.push_back(cY);
-  }
-  return 0;
+    
+    std::string TemplFileLoc = temLocations+"cam"+std::to_string(camera)+"/";
+    cv::Mat _tempReadTemplate;
+
+    int NMark = Xs.size();
+
+    for (int i=1; i<=NMark; i++){
+        std::string templName = "templ"+std::to_string(i)+".png";
+        std::string _tfilename=TemplFileLoc+templName;
+        _tempReadTemplate = cv::imread(_tfilename, 0);
+        ProcessImage(_tempReadTemplate);
+        _tempReadTemplate.release();
+        FiducialMark templ  = FiducialMark(camera,  Xs[i-1], Ys[i-1], cXs[i-1], cYs[i-1], templName,  _tempReadTemplate);
+        if (SAVE_DEBUG_IMAGES) cv::imwrite("cam"+std::to_string(camera)+"_"+templName,_tempReadTemplate);
+        SearchTemplates.push_back(templ);
+    }
 }
 
 void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){

@@ -33,7 +33,7 @@ struct FiducialMark{
 
 };
 
-
+void LoadTemplatesConfig(int, std::vector<FiducialMark>&, std::string );
 void LoadTemplatesCam0(std::vector<FiducialMark>&, std::string );
 void LoadTemplatesCam1(std::vector<FiducialMark>&, std::string );
 void LoadTemplatesCam2(std::vector<FiducialMark>&, std::string );
