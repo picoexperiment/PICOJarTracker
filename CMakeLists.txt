@@ -5,7 +5,9 @@ project( CountParticulates )
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} .)
 
 find_package(OpenCV REQUIRED)
-find_package(Boost REQUIRED COMPONENTS regex filesystem QUIET)
+find_package(Boost REQUIRED COMPONENTS regex filesystem program_options QUIET)
+execute_process(COMMAND git submodule update --init --recursive)
+
 include_directories(${OpenCV_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR}/minizip-ng/)
 execute_process(COMMAND git submodule update --init --recursive
   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}

@@ -35,6 +35,8 @@
 #include "ParseFolder/RawParser.hpp"
 #include "ParseFolder/ZipParser.hpp"
 
+#include <boost/program_options.hpp>
+namespace po = boost::program_options;
 
 const int evalEntropyThresholdFrames = 2;
 std::vector<int> badEvents;
@@ -99,27 +101,63 @@ void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNu
 }
 
 
+std::string usage(){
+    std::string msg(
+                "Usage: P60Optometrist[-hz] [-D data_series] [-t template_dir] -d data_dir -r run_ID -o out_dir\n"
+                "Run the AutoBub3hs bubble finding algorithm on a PICO run\n\n"
+                "Required arguments:\n"
+                "  -d, --data_dir = Dir\t\tpath to the directory in which the run folder/file is stored\n"
+                "  -r, --run_id = Str\t\trun ID, formatted as YYYYMMDD_*\n"
+                "  -o, --out_dir = Dir\t\tdirectory to write the output file to\n"
+                "  -t, --template_dir = Dir\tdirectory containing subfolders with template images per camera. Subdirectories should be names \"cam0\", \"cam1\", etc.\n\n"
+                "Optional arguments:\n"
+                "  -h, --help\t\t\tgive this help message\n"
+                "  -z, --zip\t\t\tindicate the run is stored as a zip file; otherwise assumed to be in a directory\n"
+                "  -D, --data_series = Str\tname of the data series, e.g. 40l-19, 30l-16, etc.\n"
+    );
+    return msg;
+}
 
 
 /*The main autobub code starts here*/
 int main(int argc, char** argv)
 {
+    std::string dataLoc;
+    std::string run_number;
+    std::string out_dir;
+    std::string tem_dir;
+    std::string data_series;
+    bool zipped = false;
 
-    printf("This is P60Optometrist perspective tracker, the bubble chamber or the camera movement tracker.\n");
+    // generic options
+    po::options_description generic("Arguments");
+    generic.add_options()
+        ("help,h", "produce help message")
+        ("data_series,D", po::value<std::string>(&data_series)->default_value(""), "data series name, e.g. 30l-16, 40l-19, etc.")
+        ("zip,z", po::bool_switch(&zipped), "run is stored as a zip file")
+        ("data_dir,d", po::value<std::string>(&dataLoc), "directory in which the run is stored")
+        ("run_num,r", po::value<std::string>(&run_number), "run ID, formatted as YYYYMMDD_")
+        ("out_dir,o", po::value<std::string>(&out_dir), "directory to write the output file to")
+        ("template_dir,t", po::value<std::string>(&tem_dir), "directory containing the camera mask pictures")
+    ;
 
-    if (argc < 5)
-    {
-        printf("Not enough parameters.\nUsage: P60Optometrist <location of data> <run number> <directory for output file> <template location> <storage format>\nEg: ./P60Optometrist /coupp/data/30l-16/ 20160912_4 /home/coupp/recon/ /storage/templates/ zip\n");
+    // Parsing arguments
+    po::variables_map vm;
+    po::store(po::command_line_parser(argc, argv).
+            options(generic).run(), vm);
+    po::notify(vm);
+
+    if (vm.count("help") | argc == 1){
+        std::cout << usage() << std::endl;
+        return 1;
+    }
+
+    if (dataLoc.compare("") == 0 | run_number.compare("") == 0 | out_dir.compare("") == 0){
+        std::cerr << "Insufficient required arguments; use \"P60Optometrist -h\" to view required arguments" << std::endl;
         return -1;
     }
 
-    std::string dataLoc = argv[1];
-    std::string run_number = argv[2];
-    std::string out_dir = argv[3];
-    std::string tem_dir = argv[4];
-
-    std::string storage_format = "raw";
-    if (argc >= 6){ storage_format = argv[5]; }
+    printf("This is P60Optometrist perspective tracker, the bubble chamber or the camera movement tracker.\n");
 
     if (dataLoc.find_last_of("/") != dataLoc.size()-1) dataLoc+="/";
     if (out_dir.find_last_of("/") != out_dir.size()-1) out_dir+="/";
@@ -132,17 +170,11 @@ int main(int argc, char** argv)
     std::string imageFolder = "/Images/";
     Parser *FileParser;
     /* The Parser reads directories/zip files and retreives image data */
-    if (storage_format == "raw"){
-        FileParser = new RawParser(eventDir, imageFolder, imageFormat);
-    }
-    else if (storage_format == "zip"){
+    if (zipped){
         FileParser = new ZipParser(eventDir, imageFolder, imageFormat);
     }
     else {
-        std::cout << "Unknown storage format from command line arguments: " << storage_format << std::endl;
-        //for (int icam = 0; icam < 4; icam++){ PICO60Output->stageMarkerOutputError(icam, -10, -1); }
-        //PICO60Output->writeCameraOutput();
-        return -10;
+        FileParser = new RawParser(eventDir, imageFolder, imageFormat);
     }
 
     /*Construct list of events*/
