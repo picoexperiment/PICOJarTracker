@@ -187,14 +187,14 @@ int main(int argc, char** argv)
     std::vector<FiducialMark> CameraTrackObjects1;
     std::vector<FiducialMark> CameraTrackObjects2;
     std::vector<FiducialMark> CameraTrackObjects3;
-    int NMark0 = LoadTemplatesCam0(CameraTrackObjects0, tem_dir);
-    int NMark1 = LoadTemplatesCam1(CameraTrackObjects1, tem_dir);
-    int NMark2 = LoadTemplatesCam2(CameraTrackObjects2, tem_dir);
-    int NMark3 = LoadTemplatesCam3(CameraTrackObjects3, tem_dir);
+    LoadTemplatesCam0(CameraTrackObjects0, tem_dir);
+    LoadTemplatesCam1(CameraTrackObjects1, tem_dir);
+    LoadTemplatesCam2(CameraTrackObjects2, tem_dir);
+    LoadTemplatesCam3(CameraTrackObjects3, tem_dir);
 
     /*I anticipate the object to become large with many bubbles, so I wanted it on the heap*/
     OutputWriter *PICO60Output = new OutputWriter(out_dir, run_number);
-    PICO60Output->writeHeader(NMark0,NMark1,NMark2,NMark3);
+    PICO60Output->writeHeader(CameraTrackObjects0.size(),CameraTrackObjects1.size(),CameraTrackObjects2.size(),CameraTrackObjects3.size());
 
 
 

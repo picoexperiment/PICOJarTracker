@@ -4,6 +4,9 @@
 #include "LoadTemplates.hpp"
 #include <stdio.h>
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 #define SAVE_DEBUG_IMAGES false
 
@@ -73,9 +76,44 @@ void LoadTemplatesSingleCam(std::vector<cv::Mat>& SearchTemplates, int camera, i
 FiducialMark::FiducialMark(int camera, float TX, float TY, float cX, float cY, std::string FileLocAndName, cv::Mat TImage):
     camera(camera), TemplateX(TX), TemplateY(TY), correctionsX(cX), correctionsY(cY), TemplateFileName(FileLocAndName), TemplateImage(TImage){}
 
+bool LoadTemplatesConfig(int camera, std::string temLocations, std::vector<double>& Xs, std::vector<double>& Ys, std::vector<double>& cXs, std::vector<double>& cYs){
+  std::ifstream fin;
+  std::string FileLoc = temLocations+"templ.cfg";
+  fin.open(FileLoc);
+  if (!fin.is_open()){
+    std::cout << "Templates config file not found at " << FileLoc << std::endl;
+    return 1;
+  }
+  double templ, X, Y, cX, cY;
+  std::string head;
+  bool head_found = false;
+  while (!fin.eof()){
+    std::string line;
+    getline(fin,line);
+    std::stringstream ss(line);
+    if (ss.str()[0] == '#' || ss.str() == "" || ss.str()[0] == ' '){
+      //std::cout << "Ignoring: " << line << std::endl;
+      continue;
+    }
+    if (!head_found){   //Find camera header
+        ss >> head;
+        if (head == "cam"+std::to_string(camera)){
+            head_found = true;
+        }
+        continue;
+    }
+    if (ss.str()[0] == 'c') break;  //At next header, so leave now
+    ss >> templ >> X >> Y >> cX >> cY;
+    if (fin.eof()) break;
+    Xs.push_back(X);
+    Ys.push_back(Y);
+    cXs.push_back(cX);
+    cYs.push_back(cY);
+  }
+  return 0;
+}
 
-
-int LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+void LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam0/";
     cv::Mat _tempReadTemplate;
@@ -120,12 +158,11 @@ int LoadTemplatesCam0(std::vector<FiducialMark>& SearchTemplates, std::string te
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
-    return NMark0;
 }
 
 
 
-int LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+void LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam1/";
     cv::Mat _tempReadTemplate;
@@ -172,10 +209,9 @@ int LoadTemplatesCam1(std::vector<FiducialMark>& SearchTemplates, std::string te
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
-    return NMark1;
 }
 
-int LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+void LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam2/";
     cv::Mat _tempReadTemplate;
@@ -228,11 +264,10 @@ int LoadTemplatesCam2(std::vector<FiducialMark>& SearchTemplates, std::string te
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11, templ12, templ13, templ14};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
-    return NMark2;
 }
 
 
-int LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
+void LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string temLocations){
 
     std::string FileLoc = temLocations+"cam3/";
     cv::Mat _tempReadTemplate;
@@ -279,7 +314,6 @@ int LoadTemplatesCam3(std::vector<FiducialMark>& SearchTemplates, std::string te
     // SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6, templ7, templ8, templ9, templ10, templ11};
     SearchTemplates = {templ1, templ2, templ3, templ4, templ5, templ6};
 
-    return NMark3;
 }
 
 
