@@ -34,9 +34,5 @@ struct FiducialMark{
 };
 
 bool LoadTemplatesConfig(int, std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam0(std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam1(std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam2(std::vector<FiducialMark>&, std::string );
-void LoadTemplatesCam3(std::vector<FiducialMark>&, std::string );
 
 #endif // LoadTemplates_HPP_INCLUDED
