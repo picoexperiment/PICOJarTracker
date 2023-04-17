@@ -81,6 +81,7 @@ bool LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
     std::vector<double> Ys;
     std::vector<double> cXs;
     std::vector<double> cYs;
+    std::vector<int> templ_nums;
     SearchTemplates.clear();
     std::ifstream fin;
     std::string ConfigFileLoc = temLocations+"templ.cfg";
@@ -89,7 +90,8 @@ bool LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
         std::cout << "Templates config file not found at " << ConfigFileLoc << std::endl;
         return -1;
     }
-    double templ, X, Y, cX, cY;
+    int templ;
+    double X, Y, cX, cY;
     std::string head;
     bool head_found = false;
     while (!fin.eof()){
@@ -110,6 +112,7 @@ bool LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
         if (ss.str()[0] == 'c') break;  //At next header, so leave now
         ss >> templ >> X >> Y >> cX >> cY;
         if (fin.eof()) break;
+        templ_nums.push_back(templ);
         Xs.push_back(X);
         Ys.push_back(Y);
         cXs.push_back(cX);
@@ -121,8 +124,8 @@ bool LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
 
     int NMark = Xs.size();
 
-    for (int i=1; i<=NMark; i++){
-        std::string templName = "templ"+std::to_string(i)+".png";
+    for (int i=0; i<NMark; i++){
+        std::string templName = "templ"+std::to_string(templ_nums[i])+".png";
         std::string _tfilename=TemplFileLoc+templName;
         _tempReadTemplate = cv::imread(_tfilename, 0);
         if (_tempReadTemplate.empty()){
@@ -130,7 +133,7 @@ bool LoadTemplatesConfig(int camera, std::vector<FiducialMark>& SearchTemplates,
             return -2;
         }
         ProcessImage(_tempReadTemplate);
-        FiducialMark templ  = FiducialMark(camera,  Xs[i-1], Ys[i-1], cXs[i-1], cYs[i-1], templName,  _tempReadTemplate);
+        FiducialMark templ  = FiducialMark(camera,  Xs[i], Ys[i], cXs[i], cYs[i], templName,  _tempReadTemplate);
         if (SAVE_DEBUG_IMAGES) cv::imwrite("cam"+std::to_string(camera)+"_"+templName,_tempReadTemplate);
         SearchTemplates.push_back(templ);
         _tempReadTemplate.release();
