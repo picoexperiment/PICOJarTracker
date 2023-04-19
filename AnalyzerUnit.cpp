@@ -132,7 +132,7 @@ void AnalyzerUnit::TrackAFeature(FiducialMark& Template, cv::Point2f& BestMatchL
     cv::Mat result;
 
     /*Restrict the ROT of the analysisFrame*/
-    cv::Rect TemplateSearchZone = cv::Rect(Template.TemplateX-45, Template.TemplateY-45, 90, 90);
+    cv::Rect TemplateSearchZone = cv::Rect(Template.TemplateX+Template.TemplateImage.cols/2-45,Template.TemplateY+Template.TemplateImage.rows/2-45, 90, 90);
     cv::Mat _AnaFrameSmallROI = cv::Mat(this->AnalysisFrame, TemplateSearchZone);
 
 
