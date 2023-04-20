@@ -5,6 +5,11 @@ project( CountParticulates )
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} .)
 
 find_package(OpenCV REQUIRED)
+# It seems that boost isn't installed properly on graham. The single-threaded
+# libraries are always loaded, even if the multi-threaded libraries are the
+# default. Since we don't need multi-threading here, it's fine to just turn it
+# off.
+set(Boost_USE_MULTITHREADED 0)
 find_package(Boost REQUIRED COMPONENTS regex filesystem program_options QUIET)
 execute_process(COMMAND git submodule update --init --recursive)
 
