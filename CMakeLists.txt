@@ -71,7 +71,6 @@ set(HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/AnalyzerUnit.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/LoadTemplates.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/common/UtilityFunctions.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/NumMarks.hpp
 )
 
 #file(GLOB minizip_headers ${CMAKE_CURRENT_SOURCE_DIR}/minizip-ng/*h)

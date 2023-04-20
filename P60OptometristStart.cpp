@@ -35,9 +35,6 @@
 #include "ParseFolder/RawParser.hpp"
 #include "ParseFolder/ZipParser.hpp"
 
-/*Number of Marks in Each Camera*/
-#include "NumMarks.hpp"
-
 #include <boost/program_options.hpp>
 namespace po = boost::program_options;
 
@@ -106,7 +103,7 @@ void RunEachCameraAnalysisMachine(OutputWriter** P60Output, std::string AEventNu
 
 std::string usage(){
     std::string msg(
-                "Usage: P60Optometrist[-hz] [-D data_series] [-t template_dir] -d data_dir -r run_ID -o out_dir\n"
+                "Usage: P60Optometrist[-hz] [-t template_dir] -d data_dir -r run_ID -o out_dir\n"
                 "Run the AutoBub3hs bubble finding algorithm on a PICO run\n\n"
                 "Required arguments:\n"
                 "  -d, --data_dir = Dir\t\tpath to the directory in which the run folder/file is stored\n"
@@ -116,7 +113,6 @@ std::string usage(){
                 "Optional arguments:\n"
                 "  -h, --help\t\t\tgive this help message\n"
                 "  -z, --zip\t\t\tindicate the run is stored as a zip file; otherwise assumed to be in a directory\n"
-                "  -D, --data_series = Str\tname of the data series, e.g. 40l-19, 30l-16, etc.\n"
     );
     return msg;
 }
@@ -129,14 +125,12 @@ int main(int argc, char** argv)
     std::string run_number;
     std::string out_dir;
     std::string tem_dir;
-    std::string data_series;
     bool zipped = false;
 
     // generic options
     po::options_description generic("Arguments");
     generic.add_options()
         ("help,h", "produce help message")
-        ("data_series,D", po::value<std::string>(&data_series)->default_value(""), "data series name, e.g. 30l-16, 40l-19, etc.")
         ("zip,z", po::bool_switch(&zipped), "run is stored as a zip file")
         ("data_dir,d", po::value<std::string>(&dataLoc), "directory in which the run is stored")
         ("run_num,r", po::value<std::string>(&run_number), "run ID, formatted as YYYYMMDD_")
@@ -167,10 +161,6 @@ int main(int argc, char** argv)
     if (tem_dir.find_last_of("/") != tem_dir.size()-1) tem_dir+="/";
 
     std::string eventDir=dataLoc+run_number+"/";
-
-    /*I anticipate the object to become large with many bubbles, so I wanted it on the heap*/
-    OutputWriter *PICO60Output = new OutputWriter(out_dir, run_number);
-    PICO60Output->writeHeader(NMark0,NMark1,NMark2,NMark3);
 
     /* File parser stuff */
     std::string imageFormat = "cam%d_image%u.png";
@@ -226,10 +216,19 @@ int main(int argc, char** argv)
     std::vector<FiducialMark> CameraTrackObjects1;
     std::vector<FiducialMark> CameraTrackObjects2;
     std::vector<FiducialMark> CameraTrackObjects3;
-    LoadTemplatesCam0(CameraTrackObjects0, tem_dir);
-    LoadTemplatesCam1(CameraTrackObjects1, tem_dir);
-    LoadTemplatesCam2(CameraTrackObjects2, tem_dir);
-    LoadTemplatesCam3(CameraTrackObjects3, tem_dir);
+    int templLoadStatus = 0;
+    templLoadStatus += LoadTemplatesConfig(0,CameraTrackObjects0, tem_dir);
+    templLoadStatus += LoadTemplatesConfig(1,CameraTrackObjects1, tem_dir);
+    templLoadStatus += LoadTemplatesConfig(2,CameraTrackObjects2, tem_dir);
+    templLoadStatus += LoadTemplatesConfig(3,CameraTrackObjects3, tem_dir);
+    if (templLoadStatus != 0){
+        std::cout << "Failed to load templates. Optometrist cannot continue." << std::endl;
+        return -2;
+    }
+
+    /*I anticipate the object to become large with many bubbles, so I wanted it on the heap*/
+    OutputWriter *PICO60Output = new OutputWriter(out_dir, run_number);
+    PICO60Output->writeHeader(CameraTrackObjects0.size(),CameraTrackObjects1.size(),CameraTrackObjects2.size(),CameraTrackObjects3.size());
 
 
 

@@ -23,6 +23,8 @@ class OutputWriter{
         std::ofstream OutFile;
         std::stringstream _StreamOutput;
         std::stringstream _StreamOutputMatrix;
+        
+        int NMarkCam0, NMarkCam1, NMarkCam2, NMarkCam3;
 
 
     protected:
