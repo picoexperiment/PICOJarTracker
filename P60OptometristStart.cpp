@@ -113,6 +113,7 @@ std::string usage(){
                 "Optional arguments:\n"
                 "  -h, --help\t\t\tgive this help message\n"
                 "  -z, --zip\t\t\tindicate the run is stored as a zip file; otherwise assumed to be in a directory\n"
+                "  -e, --event = Int\t\t\tprocess a single event rather than the whole run\n"
     );
     return msg;
 }
@@ -126,6 +127,7 @@ int main(int argc, char** argv)
     std::string out_dir;
     std::string tem_dir;
     bool zipped = false;
+    int event_user = -1;
 
     // generic options
     po::options_description generic("Arguments");
@@ -136,6 +138,7 @@ int main(int argc, char** argv)
         ("run_num,r", po::value<std::string>(&run_number), "run ID, formatted as YYYYMMDD_")
         ("out_dir,o", po::value<std::string>(&out_dir), "directory to write the output file to")
         ("template_dir,t", po::value<std::string>(&tem_dir), "directory containing the camera mask pictures")
+        ("event,e", po::value<int>(&event_user), "specify a single event to process")
     ;
 
     // Parsing arguments
@@ -241,6 +244,7 @@ int main(int argc, char** argv)
 
     for (int evi = 0; evi < EventList.size(); evi++)
     {
+        if (event_user >= 0 && evi != event_user) continue;
         std::string imageDir=eventDir+EventList[evi]+"/Images/";
         printf("\nProcessing event: %s / %d  ... ", EventList[evi].c_str(), EventList.size()-1);
 

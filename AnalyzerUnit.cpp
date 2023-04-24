@@ -181,7 +181,11 @@ void AnalyzerUnit::TrackAFeature(FiducialMark& Template, cv::Point2f& BestMatchL
     inv_mass = 1.0/total_mass;
     BestMatchSubPixel *= inv_mass;
 
-
+    // Deal with blank images
+    if (minVal == maxVal){
+        this->okToProceed=false;
+        throw -11;
+    }
 
     /*Offset correction*/
     BestMatchLoc = cv::Point2f(BestMatchSubPixel.x+TemplateSearchZone.x+Template.correctionsX, BestMatchSubPixel.y+Template.correctionsY+TemplateSearchZone.y);
