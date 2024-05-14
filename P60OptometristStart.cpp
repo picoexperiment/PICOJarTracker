@@ -180,11 +180,11 @@ int main(int argc, char** argv)
     /*Construct list of events*/
     std::vector<std::string> EventList;
     int* EVstatuscode = 0;
-    std::cout<<eventDir<<"\n";
     try
     {
         //GetEventDirLists(eventDir.c_str(), EventList, EVstatuscode);
         FileParser->GetEventDirLists(EventList);
+        FileParser->VerifyEventList(EventList);
 
     /*Crash handler at the begining of the program - writes -5 if the folder could not be read*/
     }

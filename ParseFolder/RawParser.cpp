@@ -13,6 +13,7 @@
 #include <dirent.h>
 #include <stdio.h>
 #include <vector>
+#include <fstream>
 #include <string.h>
 #include <sys/types.h> //.... added
 #include <sys/stat.h>  //....
@@ -152,5 +153,23 @@ void RawParser::ParseAndSortFramesInFolder(std::string EventID, int Camera, std:
             }
         }
         std::sort(Contents.begin(), Contents.end());
+    }
+}
+
+
+void RawParser::GetRunFileInfo(std::vector<std::string>& EventListFromFile){
+    // Find the run number
+    boost::filesystem::path runFolderPath = this->RunFolder;
+    runFolderPath += "/";  // This ensures the last character is a slash, required for the next part
+    std::string runID = runFolderPath.parent_path().filename().string();
+
+    boost::filesystem::path runFilePath = (runFolderPath / runID).string() + ".txt";
+    std::ifstream ifs(runFilePath.c_str());
+
+    // Extract actual event numbers from run file
+    std::string _;
+    int eventNum;
+    while (ifs >> _ >> eventNum >> _ >> _ >> _ >> _ >> _ >> _ >> _ >> _ >> _){
+        EventListFromFile.push_back(std::to_string(eventNum));
     }
 }

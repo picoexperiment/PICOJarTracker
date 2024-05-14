@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <vector>
 #include <algorithm>
+#include <istream>
 #include <string.h>
 #include <sys/types.h> //.... added
 #include <sys/stat.h>  //....
@@ -68,6 +69,8 @@ Parser(RunFolder, ImageFolder, ImageFormat){
         throw -10;
     }
 
+    this->runID = "";
+    this->runFileLoc = -1;
 }
 
 
@@ -108,6 +111,12 @@ void ZipParser::BuildFileList(){
     boost::regex re(re_str);
     boost::smatch match;
 
+    /* Search for run file */
+    std::string run_id_str = ".*(\\d{8}_\\d+).*";
+    boost::regex run_id_regex(run_id_str);
+    std::string run_file_str;
+    boost::regex run_file_regex;
+
     int err = 0;
     mz_zip_file *file_info = NULL;
 
@@ -121,9 +130,29 @@ void ZipParser::BuildFileList(){
         err = mz_zip_entry_get_info(this->zip_handle, &file_info);
         this->FileContents.push_back(file_info->filename);
         std::string filename = file_info->filename;
+
+        // Check match for images
         if (boost::regex_match(filename, match, re)){
             this->ImageNames[match[1].str()][match[2].str()] = file_info->filename;
             this->ImageLocs[match[1].str()][match[2].str()] = mz_zip_get_entry(this->zip_handle);
+
+        }
+
+        // Try to find run ID
+        if (this->runID.empty() && boost::regex_match(filename, match, run_id_regex)){
+            boost::filesystem::path _tmp = match[1].str();
+            _tmp += "/";  // This ensures the last character is a slash, required for the next part
+            this->runID = _tmp.parent_path().filename().string();
+            run_file_str = ".*" + this->runID + ".txt";
+            run_file_regex = boost::regex(run_file_str);
+        }
+
+        // Just double check if it's filled from the last if statement.
+        // CANNOT happen in an else, or it might miss the file.
+        if (!this->runID.empty() && (this->runFileLoc < 0)) {
+            if (boost::regex_match(filename, match, run_file_regex)){
+                this->runFileLoc = mz_zip_get_entry(this->zip_handle);
+            }
         }
         err = mz_zip_goto_next_entry(this->zip_handle);
     }
@@ -277,5 +306,32 @@ void ZipParser::ParseAndSortFramesInFolder(std::string EventID, int camera, std:
         auto t1 = std::chrono::high_resolution_clock::now();
         std::chrono::duration<double, std::milli> dt = t1 - t0;
         std::cout << "ParseAndSortFramesInFolder: " << dt.count() << std::endl;
+    }
+}
+
+
+void ZipParser::GetRunFileInfo(std::vector<std::string>& EventListFromFile){
+    if (this->FileContents.size()==0) this->BuildFileList();
+
+    int err = 0;
+
+    /* Go to the location of the data in the zip file, get file info. */
+    mz_zip_file *file_info;
+    err += mz_zip_goto_entry(this->zip_handle, this->runFileLoc);
+    err += mz_zip_entry_get_info(this->zip_handle, &file_info);
+
+    /* Store data from file in buffer */
+    char buf[file_info->uncompressed_size];
+    err += mz_zip_entry_read_open(this->zip_handle, 0, NULL);
+    mz_zip_entry_read(this->zip_handle, buf, file_info->uncompressed_size);
+    err += mz_zip_entry_close(this->zip_handle);
+
+    std::istringstream iss(buf);
+
+    // Extract actual event numbers from run file
+    std::string _;
+    int eventNum;
+    while (iss >> _ >> eventNum >> _ >> _ >> _ >> _ >> _ >> _ >> _ >> _ >> _){
+        EventListFromFile.push_back(std::to_string(eventNum));
     }
 }
