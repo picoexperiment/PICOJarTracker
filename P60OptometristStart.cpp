@@ -184,7 +184,7 @@ int main(int argc, char** argv)
     {
         //GetEventDirLists(eventDir.c_str(), EventList, EVstatuscode);
         FileParser->GetEventDirLists(EventList);
-        FileParser->VerifyEventList(EventList);
+        //FileParser->VerifyEventList(EventList);
 
     /*Crash handler at the begining of the program - writes -5 if the folder could not be read*/
     }
